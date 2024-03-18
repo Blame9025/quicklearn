@@ -8,3 +8,9 @@
       background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));
     }
   }
+.dropdown{
+
+  position: absolute;
+  left: 17vw;
+  top: 1vh;
+}

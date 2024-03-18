@@ -1,6 +1,7 @@
 import {
   TextInput,
   Code,
+  Button,
   UnstyledButton,
   Badge,
   Text,
@@ -9,7 +10,7 @@ import {
   Tooltip,
   rem,
 } from '@mantine/core';
-import { IconBulb, IconUser, IconCheckbox, IconSearch, IconPlus } from '@tabler/icons-react';
+import { IconBulb, IconUser, IconCheckbox, IconSearch, IconPlus,IconSettings } from '@tabler/icons-react';
 import { UserButton } from '../UserButton/UserButton';
 import classes from './Nav.module.css';
 
@@ -77,6 +78,14 @@ export function Nav() {
           </Tooltip>
         </Group>
         <div className={classes.collections}>{collectionLinks}</div>
+      </div>
+
+      <div className={classes.sectionFooter}>
+          <Group className={classes.footer}>
+            <Button  leftSection = {<IconSettings />}variant="default" fullWidth className={classes.footerButton}>Settings</Button>
+            <Button variant = "light" color = "red" fullWidth className={classes.footerButton}>Logout</Button>
+           
+          </Group>
       </div>
     </nav>
   );
