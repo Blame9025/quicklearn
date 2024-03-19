@@ -23,7 +23,7 @@
 .sectionFooter{
   margin-left: calc(var(--mantine-spacing-md) * -1);
   margin-right: calc(var(--mantine-spacing-md) * -1);
-  margin-top: 45vh;
+  margin-top: rem(0px);
  
 }
 .searchCode {
@@ -88,8 +88,7 @@
   display: flex;
   padding-left: calc(var(--mantine-spacing-md) + rem(2px));
   padding-right: var(--mantine-spacing-md);
-  bottom: 1vh;
-  right: 1vw;
+
 }
 
 .collectionLink {

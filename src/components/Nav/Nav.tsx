@@ -1,18 +1,23 @@
 import {
-  TextInput,
-  Code,
+  Switch,
   Button,
   UnstyledButton,
   Badge,
+  Modal,
   Text,
   Group,
   ActionIcon,
   Tooltip,
+  ScrollArea,
   rem,
+  useMantineColorScheme,
 } from '@mantine/core';
+import {useState,useEffect} from "react";
+import { useDisclosure } from '@mantine/hooks';
 import { IconBulb, IconUser, IconCheckbox, IconSearch, IconPlus,IconSettings } from '@tabler/icons-react';
 import { UserButton } from '../UserButton/UserButton';
 import classes from './Nav.module.css';
+
 
 const links = [
   { icon: IconBulb, label: 'Activity', notifications: 3 },
@@ -30,6 +35,59 @@ const collections = [
   { emoji: '📅', label: 'Events' },
   { emoji: '🙈', label: 'Debts' },
   { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+  { emoji: '📅', label: 'Events' },
+  { emoji: '🙈', label: 'Debts' },
+  { emoji: '💁‍♀️', label: 'Customers' },
+
 ];
 
 export function Nav() {
@@ -58,35 +116,64 @@ export function Nav() {
       {collection.label}
     </a>
   ));
+  const { setColorScheme,colorScheme } = useMantineColorScheme({
+    keepTransitions: true
+  });
 
+
+  const [settingsOpened, { open, close }] = useDisclosure(false);
+  const [ darkTheme, setDarkTheme ] = useState(localStorage.getItem('darkTheme') === 'true');
+  useEffect(() => {
+    setColorScheme(darkTheme ? "dark" : "light")
+    localStorage.setItem('darkTheme', darkTheme.toString());
+  }, [darkTheme]);
   return (
-    <nav className={classes.navbar}>
-      <div className={classes.section}>
-        <UserButton />
-      </div>
+    <>
+      <nav className={classes.navbar}>
+        <div className={classes.section}>
+          <UserButton />
+        </div>
 
-     
-      <div className={classes.section}>
-        <Group className={classes.collectionsHeader} justify="space-between">
-          <Text size="xs" fw={500} c="dimmed">
-            Collections
-          </Text>
-          <Tooltip label="Create collection" withArrow position="right">
-            <ActionIcon variant="default" size={18}>
-              <IconPlus style={{ width: rem(12), height: rem(12) }} stroke={1.5} />
-            </ActionIcon>
-          </Tooltip>
-        </Group>
-        <div className={classes.collections}>{collectionLinks}</div>
-      </div>
-
-      <div className={classes.sectionFooter}>
-          <Group className={classes.footer}>
-            <Button  leftSection = {<IconSettings />}variant="default" fullWidth className={classes.footerButton}>Settings</Button>
-            <Button variant = "light" color = "red" fullWidth className={classes.footerButton}>Logout</Button>
-           
+      
+        <div className={classes.section}>
+          <Group className={classes.collectionsHeader} justify="space-between">
+            <Text size="xs" fw={500} c="dimmed">
+              Collections
+            </Text>
+            <Tooltip label="Create collection" withArrow position="right">
+              <ActionIcon variant="default" size={18}>
+                <IconPlus style={{ width: rem(12), height: rem(12) }} stroke={1.5} />
+              </ActionIcon>
+            </Tooltip>
           </Group>
-      </div>
-    </nav>
+          <ScrollArea h={520}>
+            <div className={classes.collections}>{collectionLinks}</div>
+          </ScrollArea>
+        </div>
+
+        <div className={classes.sectionFooter} >
+            <Group className={classes.footer}>
+              <Button  leftSection = {<IconSettings />} variant="default" fullWidth onClick={open} className={classes.footerButton}>Settings {settingsOpened} </Button>
+              <Button variant = "light" color = "red" fullWidth className={classes.footerButton}>Logout</Button>
+            </Group>
+        </div>
+      </nav>
+      <Modal opened={settingsOpened} onClose={close} title="Settings">
+          <Switch
+            label="Dark mode"
+            onLabel="ON" 
+            checked={darkTheme}
+            onChange={(event) => {
+              setDarkTheme(event.currentTarget.checked)
+              //
+            }}
+
+            offLabel="OFF"
+            onClick={() => {
+
+            }}
+          />
+      </Modal>
+    </>
   );
 }

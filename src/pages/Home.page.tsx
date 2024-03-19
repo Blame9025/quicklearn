@@ -7,6 +7,7 @@ export function HomePage() {
   return (
     <>
       <Nav />
+      
     </>
   );
 }
