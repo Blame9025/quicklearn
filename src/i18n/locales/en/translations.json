@@ -1,3 +1,20 @@
 {
-    "login continueWith": "Or continue with"
+    "auth_continueWith": "Or continue with",
+    "auth_passwordLabel": "Password",
+    "auth_register_buttonLabel": "Register",
+    "auth_register_namePlaceholder": "Your full name",
+    "auth_emailPlaceholder": "example@email.com",
+    "auth_passwordPlaceholder": "Your password",
+    "auth_registerText": "You don't have an account? Register",
+    "auth_loginText": "You have an account? Login",
+    "auth_register_invalidEmail": "Invalid Email",
+    "auth_tos": "I fully understand and agree Terms Of Service",
+    "auth_register_inavlidPassword": "Invalid passwword, should include at least 6 characters.",
+    "home_documents": "Documents",
+    "home_createDocumentTooltip": "Scan Document",
+    "home_settings": "Settings",
+    "home_settings_title_theme": "Theme",
+    "home_settings_title_language": "Language",
+    "home_settings_darkmode": "Dark mode",
+    "home_settings_pickLanguage": "Choose language"
 }

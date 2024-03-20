@@ -34,13 +34,13 @@ export function Auth(props: PaperProps) {
     },
 
     validate: {
-      email: (val: string) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
-      password: (val: string) => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
+      email: (val: string) => (/^\S+@\S+$/.test(val) ? null : t("auth_register_invalidEmail")),
+      password: (val: string) => (val.length <= 6 ? t("auth_register_invalidPassword") : null),
     },
   });
 
   return (
-    <Container size={600} my={200}>
+    <Container size={600} my={75}>
         <Paper radius="md" p="xl" withBorder {...props}>
           <Title className={classes.title} >
             QuickLearn
@@ -50,14 +50,14 @@ export function Auth(props: PaperProps) {
               <GithubButton radius="l">Github</GithubButton>
           </Group>
 
-          <Divider label={t("login continueWith")} labelPosition="center" my="lg" />
+          <Divider label={t("auth_continueWith")} labelPosition="center" my="lg" />
 
           <form onSubmit={form.onSubmit(() => {})}>
               <Stack>
               {type === 'register' && (
                   <TextInput
                   label="Name"
-                  placeholder="Numele tau complet"
+                  placeholder={t("auth_register_namePlaceholder")}
                   value={form.values.name}
                   onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
                   radius="md"
@@ -67,26 +67,26 @@ export function Auth(props: PaperProps) {
               <TextInput
                   required
                   label="Email"
-                  placeholder="exemplu@email.ro"
+                  placeholder={t("auth_emailPlaceholder")}
                   value={form.values.email}
                   onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
-                  error={form.errors.email && 'Invalid email'}
+                  error={form.errors.email && t("auth_register_invalidEmail")}
                   radius="md"
               />
 
               <PasswordInput
                   required
-                  label="Parola"
-                  placeholder="Parola dvs."
+                  label={t("auth_passwordLabel")}
+                  placeholder={t("auth_passwordPlaceholder")}
                   value={form.values.password}
                   onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
-                  error={form.errors.password && 'Password should include at least 6 characters'}
+                  error={form.errors.password && t("auth_register_invalidPassword")}
                   radius="md"
               />
 
               {type === 'register' && (
                   <Checkbox
-                  label="Accept termenii si conditiile de utilizare"
+                  label={t("auth_tos")}
                   checked={form.values.terms}
                   onChange={(event) => form.setFieldValue('terms', event.currentTarget.checked)}
                   />
@@ -96,11 +96,12 @@ export function Auth(props: PaperProps) {
               <Group justify="space-between" mt="xl">
               <Anchor component="button" type="button" c="dimmed" onClick={() => toggle()} size="xs">
                   {type === 'register'
-                  ? 'Ai deja cont? Login'
-                  : "Nu ai cont? Inregistreaza-te"}
+                  ? t("auth_loginText")
+                  : t("auth_registerText")}
               </Anchor>
               <Button type="submit" radius="xl">
-                  {upperFirst(type)}
+                  {type == "register" ? 
+                  t("auth_register_buttonLabel") : upperFirst(type)}
               </Button>
               </Group>
           </form>

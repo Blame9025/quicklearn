@@ -2,7 +2,7 @@ import {
   Switch,
   Button,
   UnstyledButton,
-  Badge,
+  Title,
   Modal,
   Text,
   Group,
@@ -21,7 +21,7 @@ import {
 } from '@mantine/core';
 import {useState,useEffect} from "react";
 import { useDisclosure } from '@mantine/hooks';
-import { IconBulb, IconUser, IconCheckbox, IconSearch, IconPlus,IconSettings } from '@tabler/icons-react';
+import { IconBulb, IconUser, IconCheckbox, IconLogout, IconPlus,IconSettings } from '@tabler/icons-react';
 import { UserButton } from '../UserButton/UserButton';
 import classes from './Nav.module.css';
 import { useTranslation } from 'react-i18next'
@@ -54,7 +54,7 @@ export function Nav() {
     },
   });
 
-  const [language, setLanguage] = useState<string | null>('🇷🇴 ROMANA');
+  const [language, setLanguage] = useState<string | null>('Romanian');
 
   const collectionLinks = collections.map((collection) => (
     <a
@@ -68,8 +68,8 @@ export function Nav() {
     </a>
   ));
   const languages: { [key: string]: string } = {
-    ["ro"]: "🇷🇴 ROMANA",
-    ["en"]: "🇺🇸 ENGLEZA"
+    ["ro"]: "Romanian",
+    ["en"]: "English"
   };
 
   const comboboxOptions = Object.keys(languages).map((index) => (
@@ -101,9 +101,9 @@ export function Nav() {
         <div className={classes.section}>
           <Group className={classes.collectionsHeader} justify="space-between">
             <Text size="xs" fw={500} c="dimmed">
-              Collections
+              {t("home_documents")}
             </Text>
-            <Tooltip label="Create collection" withArrow position="right">
+            <Tooltip label={t("home_createDocumentTooltip")} withArrow position="right">
               <ActionIcon variant="default" size={18}>
                 <IconPlus style={{ width: rem(12), height: rem(12) }} stroke={1.5} />
               </ActionIcon>
@@ -116,60 +116,67 @@ export function Nav() {
 
         <div className={classes.sectionFooter} >
             <Group className={classes.footer}>
-              <Button  leftSection = {<IconSettings />} variant="default" fullWidth onClick={open} className={classes.footerButton}>Settings {settingsOpened} </Button>
-              <Button variant = "light" color = "red" fullWidth className={classes.footerButton}>Logout</Button>
+              <Button  leftSection = {<IconSettings />} variant="default" fullWidth onClick={open} className={classes.footerButton}>{t("home_settings")}</Button>
+              <Button  leftSection = {<IconLogout/>} variant = "light" color = "red" fullWidth className={classes.footerButton}>Logout</Button>
             </Group>
             
         </div>
       </nav>
-      <Modal opened={settingsOpened} onClose={close} title="Settings" size="xl" className = {classes.modal} centered>
-        <Stack
-          h={200}
-          bg="var(--mantine-color-body)"
+      <Modal opened={settingsOpened} onClose={close} title={t("home_settings")} size="xl" className = {classes.modal} centered>
+        <ScrollArea
+          h={300}
         >
-            <Switch
-              label="Dark mode"
-              onLabel="ON" 
-              checked={darkTheme}
-              onChange={(event) => {
-                setDarkTheme(event.currentTarget.checked)
-                //
-              }}
+          <Stack>
+              <Text>
+                {t("home_settings_title_theme")}
+              </Text>
+              <Switch
+                label={t("home_settings_darkmode")}
+                onLabel="ON" 
+                checked={darkTheme}
+                onChange={(event) => {
+                  setDarkTheme(event.currentTarget.checked)
+                  //
+                }}
 
-              offLabel="OFF"
-              onClick={() => {
+                offLabel="OFF"
+                onClick={() => {
 
-              }}
-            />
-            <Combobox
-              store={combobox}
-              resetSelectionOnOptionHover
-              withinPortal={false}
-              onOptionSubmit={(val) => {
-                setLanguage(val);
-                combobox.updateSelectedOptionIndex('active');
-                i18n.changeLanguage(val)
-                localStorage.setItem("language",val)
-              }}
-            >
-              <Combobox.Target targetType="button">
-                <InputBase
-                  component="button"
-                  type="button"
-                  pointer
-                  rightSection={<Combobox.Chevron />}
-                  rightSectionPointerEvents="none"
-                  onClick={() => combobox.toggleDropdown()}
-                >
-                  {languages[language || ""] || <Input.Placeholder>Pick your language</Input.Placeholder>}
-                </InputBase>
-              </Combobox.Target>
+                }}
+              />
+              <Text>
+                {t("home_settings_title_language")}
+              </Text>
+              <Combobox
+                store={combobox}
+                resetSelectionOnOptionHover
+                withinPortal={false}
+                onOptionSubmit={(val) => {
+                  setLanguage(val);
+                  combobox.updateSelectedOptionIndex('active');
+                  i18n.changeLanguage(val)
+                  localStorage.setItem("language",val)
+                }}
+              >
+                <Combobox.Target targetType="button">
+                  <InputBase
+                    component="button"
+                    type="button"
+                    pointer
+                    rightSection={<Combobox.Chevron />}
+                    rightSectionPointerEvents="none"
+                    onClick={() => combobox.toggleDropdown()}
+                  >
+                    {languages[language || ""] || <Input.Placeholder>{t("home_settings_pickLanguage")}</Input.Placeholder>}
+                  </InputBase>
+                </Combobox.Target>
 
-              <Combobox.Dropdown>
-                <Combobox.Options>{comboboxOptions}</Combobox.Options>
-              </Combobox.Dropdown>
-            </Combobox>
-        </Stack>
+                <Combobox.Dropdown>
+                  <Combobox.Options>{comboboxOptions}</Combobox.Options>
+                </Combobox.Dropdown>
+              </Combobox>
+            </Stack>
+        </ScrollArea>
       </Modal>
     </>
   );

@@ -1,3 +1,20 @@
 {
-    "login continueWith": "Sau continua cu email"
+    "auth_continueWith": "Sau continua cu email",
+    "auth_passwordLabel": "Parola",
+    "auth_register_buttonLabel": "Inregistreaza-te",
+    "auth_emailPlaceholder": "exemplu@email.com",
+    "auth_register_namePlaceholder": "Numele complet",
+    "auth_passwordPlaceholder": "Parola dvs.",
+    "auth_registerText": "Nu ai cont? Inregistreaza-te",
+    "auth_loginText": "Ai deja cont? Logheaza-te",
+    "auth_register_invalidEmail": "Email invalid",
+    "auth_tos": "Accept si inteleg termenii si condiitile serviciului",
+    "auth_register_invalidPassword": "Parola invalida , trebuie sa contina cel putin 6 caractere",
+    "home_documents": "Documente",
+    "home_createDocumentTooltip": "Scaneaza document",
+    "home_settings": "Setari",
+    "home_settings_title_theme": "Tema",
+    "home_settings_title_language": "Limba",
+    "home_settings_darkmode": "Mod intunecat",
+    "home_settings_pickLanguage": "Alege limba"
 }
