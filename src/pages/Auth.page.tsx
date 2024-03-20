@@ -1,5 +1,7 @@
 import { useToggle, upperFirst } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import { useTranslation } from 'react-i18next';
+
 import classes from "./Auth.module.css"
 import {
   TextInput,
@@ -21,6 +23,8 @@ import { GoogleButton, GithubButton } from '../components/SocialButtons/SocialBu
 
 export function Auth(props: PaperProps) {
   const [type, toggle] = useToggle(['login', 'register']);
+  const { t } = useTranslation();
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -46,7 +50,7 @@ export function Auth(props: PaperProps) {
               <GithubButton radius="l">Github</GithubButton>
           </Group>
 
-          <Divider label="Sau continua cu email" labelPosition="center" my="lg" />
+          <Divider label={t("login continueWith")} labelPosition="center" my="lg" />
 
           <form onSubmit={form.onSubmit(() => {})}>
               <Stack>
