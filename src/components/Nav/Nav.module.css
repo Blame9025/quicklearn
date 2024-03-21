@@ -14,7 +14,7 @@
   margin-right: calc(var(--mantine-spacing-md) * -1);
   margin-bottom: var(--mantine-spacing-md);
 
-  &:not(:last-of-type) {
+  &:not(:first-child) {
     border-bottom: rem(1px) solid
       light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
   }
@@ -23,11 +23,9 @@
   line-height: 1;
 }
 .sectionFooter{
-
   margin-left: calc(var(--mantine-spacing-md) * -1);
   margin-right: calc(var(--mantine-spacing-md) * -1); 
-  
-
+ 
 }
 .searchCode {
   font-weight: 700;
@@ -94,7 +92,10 @@
 
 }
 .scrollbar{
-  height: 68vh;
+  overflow-y: auto;
+  height: 74vh;
+  padding-right: var(--mantine-spacing-md);
+  padding-left: var(--mantine-spacing-md);
 }
 .collectionLink {
   display: block;
