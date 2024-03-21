@@ -25,24 +25,23 @@ import { IconBulb, IconUser, IconCheckbox, IconLogout, IconPlus,IconSettings } f
 import { UserButton } from '../UserButton/UserButton';
 import classes from './Nav.module.css';
 import { useTranslation } from 'react-i18next'
+import { getLanguage } from '../Language/Language';
+import { WordIcon, PowerPointIcon } from "../CustomIcons/CustomIcons"
 
+const documents = [
+  {id: 1, file: "document1.pptx"},
+  {id: 2, file: "document5.docx"},
+  {id: 313, file: "document61.docx"},
+  {id: 241, file: "document41.docx"},
+  {id: 522, file: "document13.docx"},
+  {id: 123132, file: "document166.docx"},
 
-const links = [
-  { icon: IconBulb, label: 'Activity', notifications: 3 },
-  { icon: IconCheckbox, label: 'Tasks', notifications: 4 },
-  { icon: IconUser, label: 'Contacts' },
-];
-
-const collections = [
-  { emoji: '👍', label: 'Sales' },
-  { emoji: '🚚', label: 'Deliveries' },
-  { emoji: '💸', label: 'Discounts' },
-  
 
 ];
 
 export function Nav() {
   const {t ,i18n} = useTranslation();
+  const {languages, language, setLanguage} = getLanguage()
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: (eventSource) => {
@@ -53,34 +52,26 @@ export function Nav() {
       }
     },
   });
-
-  const [language, setLanguage] = useState<string | null>('Romanian');
-
-  const collectionLinks = collections.map((collection) => (
-    <a
-      href="#"
-      onClick={(event) => event.preventDefault()}
-      key={collection.label}
-      className={classes.collectionLink}
-    >
-      <span style={{ marginRight: rem(9), fontSize: rem(16) }}>{collection.emoji}</span>{' '}
-      {collection.label}
-    </a>
-  ));
-  const languages: { [key: string]: string } = {
-    ["ro"]: "Romanian",
-    ["en"]: "English"
-  };
-
   const comboboxOptions = Object.keys(languages).map((index) => (
     <Combobox.Option value={index} key={index} active={index === language}>
-      <Group gap="xs">
+        <Group gap="xs">
         {index === language && <CheckIcon size={12} />}
         <span>{languages[index]}</span>
-      </Group>
+        </Group>
     </Combobox.Option>
+));
+  const documentsComponents = documents.map((document) => (
+    <a href="#" onClick={(event) => event.preventDefault()} key={document.id} className={classes.collectionLink}>
+      <Group>
+      {document.file.split(".")[1] == "docx" ? <WordIcon/> : <PowerPointIcon/>} {' '}
+        
+      {document.file}
+      
+      </Group>
+
+    </a>
   ));
-  console.log(language);
+
   const [settingsOpened, { open, close }] = useDisclosure(false);
   const [ darkTheme, setDarkTheme ] = useState(localStorage.getItem('darkTheme') === 'true');
   const { setColorScheme } = useMantineColorScheme({
@@ -110,7 +101,7 @@ export function Nav() {
             </Tooltip>
           </Group>
           <ScrollArea className={classes.scrollbar}>
-            <div className={classes.collections}>{collectionLinks}</div>
+            <div className={classes.collections}>{documentsComponents}</div>
           </ScrollArea>
         </div>
 
@@ -119,7 +110,6 @@ export function Nav() {
               <Button  leftSection = {<IconSettings />} variant="default" fullWidth onClick={open} className={classes.footerButton}>{t("home_settings")}</Button>
               <Button  leftSection = {<IconLogout/>} variant = "light" color = "red" fullWidth className={classes.footerButton}>Logout</Button>
             </Group>
-            
         </div>
       </nav>
       <Modal opened={settingsOpened} onClose={close} title={t("home_settings")} size="xl" className = {classes.modal} centered>
@@ -154,8 +144,7 @@ export function Nav() {
                 onOptionSubmit={(val) => {
                   setLanguage(val);
                   combobox.updateSelectedOptionIndex('active');
-                  i18n.changeLanguage(val)
-                  localStorage.setItem("language",val)
+                  
                 }}
               >
                 <Combobox.Target targetType="button">
@@ -167,7 +156,7 @@ export function Nav() {
                     rightSectionPointerEvents="none"
                     onClick={() => combobox.toggleDropdown()}
                   >
-                    {languages[language || ""] || <Input.Placeholder>{t("home_settings_pickLanguage")}</Input.Placeholder>}
+                    {languages[language || "ro"] || <Input.Placeholder>{t("home_settings_pickLanguage")}</Input.Placeholder>}
                   </InputBase>
                 </Combobox.Target>
 
