@@ -34,17 +34,17 @@ exports.signup = async (req, res) => {
 
 };
 
-exports.signin = (req, res) => {
-    var user = User.findOne({
-        username: req.body.username
-    })
+exports.signin = async (req, res) => {
+    var user = await User.findOne({
+        email: req.body.email
+    }).exec();
         
 
     if (!user) 
         return res.status(404).send({ code: "user_not_found" });
     
 
-    var passwordIsValid = bcrypt.compareSync(
+    var passwordIsValid = await bcrypt.compare(
         req.body.password,
         user.password
     );
