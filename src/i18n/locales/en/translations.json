@@ -16,5 +16,11 @@
     "home_settings_title_theme": "Theme",
     "home_settings_title_language": "Language",
     "home_settings_darkmode": "Dark mode",
-    "home_settings_pickLanguage": "Choose language"
+    "home_settings_pickLanguage": "Choose language",
+    "dropzone_maxSizeExceded_title": "Max file size exceeded",
+    "dropzone_maxSizeExceded_content": "The file you are trying to upload is too big. The maximum file size is {{maxSize}}.",
+    "dropzone_maxFilesExceded_title": "Too many files",
+    "dropzone_maxFilesExceded_content": "You can upload maximum 1 file at a time.",
+    "dropzone_invalidFileType_title": "Invalid file type",
+    "dropzone_invalidFileType_content": "The file you are trying to upload is not supported."
 }

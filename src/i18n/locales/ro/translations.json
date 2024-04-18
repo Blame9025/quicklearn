@@ -16,5 +16,11 @@
     "home_settings_title_theme": "Tema",
     "home_settings_title_language": "Limba",
     "home_settings_darkmode": "Mod intunecat",
-    "home_settings_pickLanguage": "Alege limba"
+    "home_settings_pickLanguage": "Alege limba",
+    "dropzone_maxSizeExceded_title": "Dimensiune fisier depasita",
+    "dropzone_maxSizeExceded_content": "Fisierul pe care ai incercat sa il urci a depasit dimensiunea de {{maxSize}}.",
+    "dropzone_maxFilesExceded_title": "Prea multe fisiere",
+    "dropzone_maxFilesExceded_content": "Poti incarca maxim 1 fisier deodata.",
+    "dropzone_invalidFileType_title": "Format fisier invalid",
+    "dropzone_invalidFileType_content": "Fisierul pe care incerci sa il urci nu are extensia corecta."
 }
