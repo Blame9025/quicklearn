@@ -63,7 +63,7 @@ export function Nav() {
   const documentsComponents = documents.map((document) => (
     <a href="#" onClick={(event) => event.preventDefault()} key={document.id} className={classes.collectionLink}>
       <Group>
-      {document.file.split(".")[1] == "docx" ? <WordIcon/> : <PowerPointIcon/>} {' '}
+      {document.file.split(".")[document.file.split(".").length - 1] == "docx" ? <WordIcon/> : <PowerPointIcon/>} {' '}
         
       {document.file}
       

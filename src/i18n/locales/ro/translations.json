@@ -2,8 +2,9 @@
     "auth_continueWith": "Sau continua cu email",
     "auth_passwordLabel": "Parola",
     "auth_register_buttonLabel": "Inregistreaza-te",
-    "auth_emailPlaceholder": "exemplu@email.com",
+    "auth_login_buttonLabel": "Autentifica-te",
     "auth_register_namePlaceholder": "Numele complet",
+    "auth_emailPlaceholder": "exemplu@email.com",
     "auth_passwordPlaceholder": "Parola dvs.",
     "auth_registerText": "Nu ai cont? Inregistreaza-te",
     "auth_loginText": "Ai deja cont? Logheaza-te",
@@ -22,5 +23,26 @@
     "dropzone_maxFilesExceded_title": "Prea multe fisiere",
     "dropzone_maxFilesExceded_content": "Poti incarca maxim 1 fisier deodata.",
     "dropzone_invalidFileType_title": "Format fisier invalid",
-    "dropzone_invalidFileType_content": "Fisierul pe care incerci sa il urci nu are extensia corecta."
+    "dropzone_invalidFileType_content": "Fisierul pe care incerci sa il urci nu are extensia corecta.",
+    "router_no_token_title": "Autentificare necesara",
+    "router_no_token_content": "Trebuie sa fi autentificat pentru a accesa pagina aceasta.",
+
+    "auth_user_not_created_title": "Eroare de autentificare",
+    "auth_user_not_created_content": "A aparut o problema la autentificare, te rugam sa incerci mai tarziu.",
+
+    "auth_user_not_found_title": "Eroare de autentificare",
+    "auth_user_not_found_content": "Nu exista contul cu datele de autentificare oferite.",
+
+    "auth_invalid_password_title": "Eroare de autentificare",
+    "auth_invalid_password_content": "Parola este invalida pentru datele de autentificare oferite.",
+
+    "router_expired_token_title": "Sesiunea a expirat",
+    "router_expired_token_content": "Sesiunea de autentificare a expirat ,te rugam sa te autentifici din nou.",
+
+    "router_invalid_token_title": "Eroare de autentificare",
+    "router_invalid_token_content": "Autentificarea a esuat, te rugam sa reincerci.",
+
+    "404notfound_title": "Nimic de vazut aici 🤔",
+    "404notfound_desc": "Pagina pe care încercați să o deschideți nu există. Este posibil să fi introdus greșit adresa sau pagina a fost mutată la o altă adresă URL. Dacă credeți că aceasta este o eroare, contactați asistența.",
+    "404notfound_button": "Du-ma inapoi pe pagina principala"
 }

@@ -5,15 +5,13 @@ require('dotenv').config();
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: "http://localhost:5173"
 };
 
 app.use(cors(corsOptions));
 
-
 app.use(express.json());
 const mongoURL = process.env.DATABASE_URL;
-
 app.use(express.urlencoded({ extended: true }));
 const db = require("./db.js");
 require('./routes/auth.routes')(app);

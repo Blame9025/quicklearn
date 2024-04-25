@@ -2,6 +2,7 @@
     "auth_continueWith": "Or continue with",
     "auth_passwordLabel": "Password",
     "auth_register_buttonLabel": "Register",
+    "auth_login_buttonLabel": "Login",
     "auth_register_namePlaceholder": "Your full name",
     "auth_emailPlaceholder": "example@email.com",
     "auth_passwordPlaceholder": "Your password",
@@ -9,7 +10,7 @@
     "auth_loginText": "You have an account? Login",
     "auth_register_invalidEmail": "Invalid Email",
     "auth_tos": "I fully understand and agree Terms Of Service",
-    "auth_register_inavlidPassword": "Invalid passwword, should include at least 6 characters.",
+    "auth_register_invalidPassword": "Invalid passwword, should include at least 6 characters.",
     "home_documents": "Documents",
     "home_createDocumentTooltip": "Scan Document",
     "home_settings": "Settings",
@@ -22,5 +23,26 @@
     "dropzone_maxFilesExceded_title": "Too many files",
     "dropzone_maxFilesExceded_content": "You can upload maximum 1 file at a time.",
     "dropzone_invalidFileType_title": "Invalid file type",
-    "dropzone_invalidFileType_content": "The file you are trying to upload is not supported."
+    "dropzone_invalidFileType_content": "The file you are trying to upload is not supported.",
+    "router_no_token_title": "Authentication required",
+    "router_no_token_content": "You need to be authenticated to access this page. Please login or register.",
+
+
+    "auth_user_not_created_title": "Authentication error",
+    "auth_user_not_created_content": "User was not created due to server problems, please try again.",
+
+    "auth_user_not_found_title": "User not found",
+    "auth_user_not_found_content": "User not found with this set of credentials.",
+
+    "auth_invalid_password_title": "Wrong Credentials",
+    "auth_invalid_password_content": "You have entered an email username or password",
+
+    "router_expired_token_title": "Session expired",
+    "router_expired_token_content": "Auth session has expired, please auth again.",
+
+    "router_invalid_token_title": "Invalid token",
+    "router_invalid_token_content": "Auth has failed, please try auth again.",
+    "404notfound_title": "Nimic de vazut aici 🤔",
+    "404notfound_desc": "Pagina pe care încercați să o deschideți nu există. Este posibil să fi introdus greșit adresa sau pagina a fost mutată la o altă adresă URL. Dacă credeți că aceasta este o eroare, contactați asistența.",
+    "404notfound_button": "Du-ma inapoi pe pagina principala"
 }

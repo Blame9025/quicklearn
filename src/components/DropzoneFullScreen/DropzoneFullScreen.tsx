@@ -6,49 +6,48 @@ import { notifications } from '@mantine/notifications';
 
 import { useTranslation } from 'react-i18next'
 
-export function DropzoneFullScreenComp() {
+export function DropzoneFullScreenComp(props: {dropFile: Function}){
   const [active, setActive] = useState(true);
   const {t ,i18n} = useTranslation();
-  const maxSize = 300;
+  const maxSize = 2000;
   return (
     <>
-    <Dropzone.FullScreen
-      
-      accept={[
-          MIME_TYPES.pdf,
-          MIME_TYPES.docx,
-          MIME_TYPES.doc,
-          MIME_TYPES.pptx,
-          MIME_TYPES.ppt,
-      ]}
-      maxFiles={1}
-      maxSize={maxSize * 1024}
-      onReject={(files) =>{
-        console.log(files)
-        if(files[0].errors[0].code == "file-invalid-type")
-          return notifications.show({
-            title: t("dropzone_invalidFileType_title"),
-            message: t("dropzone_invalidFileType_content"),
-            color: 'red',
-          });
-        if(files.length > 1)
-          return notifications.show({
-            title: t("dropzone_maxFilesExceded_title"),
-            message: t("dropzone_maxFilesExceded_content"),
-            color: 'red',
-          });
-        if(files[0].errors[0].code == "file-too-large")
-          return notifications.show({
-            title: t("dropzone_maxSizeExceded_title"),
-            message: t("dropzone_maxSizeExceded_content",{maxSize: maxSize+"KB"}),
-            color: 'red',
-          });
-      }}
-      onDrop={(files) => {
-          console.log(files);
+      <Dropzone.FullScreen
+        accept={[
+            MIME_TYPES.pdf,
+            MIME_TYPES.docx,
+            MIME_TYPES.doc,
+            MIME_TYPES.pptx,
+            MIME_TYPES.ppt,
+        ]}
+        maxFiles={1}
+        maxSize={maxSize * 1024}
+        onReject={(files) =>{
+          console.log(files)
+          if(files[0].errors[0].code == "file-invalid-type")
+            return notifications.show({
+              title: t("dropzone_invalidFileType_title"),
+              message: t("dropzone_invalidFileType_content"),
+              color: 'red',
+            });
+          if(files.length > 1)
+            return notifications.show({
+              title: t("dropzone_maxFilesExceded_title"),
+              message: t("dropzone_maxFilesExceded_content"),
+              color: 'red',
+            });
+          if(files[0].errors[0].code == "file-too-large")
+            return notifications.show({
+              title: t("dropzone_maxSizeExceded_title"),
+              message: t("dropzone_maxSizeExceded_content",{maxSize: maxSize+"KB"}),
+              color: 'red',
+            });
+        }}
+        onDrop={(files: File[]) => {
+          props.dropFile(files[0]);
           setActive(false);
-      }}
-    >
+        }}
+      >
         <Group justify="center" gap="xl" mih={220} style={{ pointerEvents: 'none' }}>
           <Dropzone.Accept>
             <IconUpload

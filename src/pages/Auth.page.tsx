@@ -1,7 +1,8 @@
 import { useToggle, upperFirst } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import { useNavigate } from "react-router-dom"
 import { useTranslation } from 'react-i18next';
-
+import { notifications } from '@mantine/notifications';
 import classes from "./Auth.module.css"
 import {
   TextInput,
@@ -20,11 +21,26 @@ import {
   Stack,
 } from '@mantine/core';
 import { GoogleButton, GithubButton } from '../components/SocialButtons/SocialButtons';
+import axiosHandler from '../axios';
 
 export function Auth(props: PaperProps) {
-  const [type, toggle] = useToggle(['login', 'register']);
+  const [type, toggle] = useToggle(['signin', 'signup']);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
+  async function handleOnSubmit(values: { email: string; password: string; name: string; terms: boolean} ){
+    console.log("asdadas")
+    const response = await axiosHandler.post("/api/auth/"+type, values);
+    console.log("response", response.data)
+    if(response.data.code != "success")
+      return notifications.show({
+        title: t("auth_"+response.data.code+"_title"),
+        message: t("auth_"+response.data.code+"_content"),
+        color: "red",
+      });
+    sessionStorage.setItem("token", response.data.accessToken);
+    navigate("/")
+  }
   const form = useForm({
     initialValues: {
       email: '',
@@ -54,15 +70,15 @@ export function Auth(props: PaperProps) {
 
             <Divider label={t("auth_continueWith")} labelPosition="center" my="lg" />
 
-            <form onSubmit={form.onSubmit(() => {})}>
+            <form onSubmit={form.onSubmit((values) => handleOnSubmit(values))}>
                 <Stack>
-                {type === 'register' && (
+                {type === 'signup' && (
                     <TextInput
-                    label="Name"
-                    placeholder={t("auth_register_namePlaceholder")}
-                    value={form.values.name}
-                    onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
-                    radius="md"
+                      label="Name"
+                      placeholder={t("auth_register_namePlaceholder")}
+                      value={form.values.name}
+                      onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
+                      radius="md"
                     />
                 )}
 
@@ -86,7 +102,7 @@ export function Auth(props: PaperProps) {
                     radius="md"
                 />
 
-                {type === 'register' && (
+                {type === 'signup' && (
                     <Checkbox
                     label={t("auth_tos")}
                     checked={form.values.terms}
@@ -97,13 +113,13 @@ export function Auth(props: PaperProps) {
 
                 <Group justify="space-between" mt="xl">
                 <Anchor component="button" type="button" c="dimmed" onClick={() => toggle()} size="xs">
-                    {type === 'register'
+                    {type === 'signup'
                     ? t("auth_loginText")
                     : t("auth_registerText")}
                 </Anchor>
                 <Button type="submit" radius="xl">
-                    {type == "register" ? 
-                    t("auth_register_buttonLabel") : upperFirst(type)}
+                    {type == "signup" ? 
+                    t("auth_register_buttonLabel") : t("auth_login_buttonLabel")}
                 </Button>
                 </Group>
             </form>

@@ -4,6 +4,25 @@ const User = db.user;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcrypt");
 
+exports.verify = async  (req, res) => {
+    if(!req.body.token)
+        return res.send({ code: "no_token" });
+    try{
+        const decode = jwt.verify(req.body.token, process.env.JWT_SECRET);
+        const isExpired = Date.now() >= decode.exp * 1000
+        if(isExpired)
+            return res.send({
+                code: "expired_token"
+            })
+        res.send({
+            code: "success"
+        })
+    }catch(err){
+        res.send({
+            code: "invalid_token"
+        })
+    }
+}
 exports.signup = async (req, res) => {
     const user = new User({
         name: req.body.name,
@@ -24,7 +43,7 @@ exports.signup = async (req, res) => {
 
 
     res.status(200).send({
-        code: "user_created",
+        code: "success",
         id: user._id,
         name: user.name,
         email: user.email,
@@ -41,7 +60,7 @@ exports.signin = async (req, res) => {
         
 
     if (!user) 
-        return res.status(404).send({ code: "user_not_found" });
+        return res.send({ code: "user_not_found" });
     
 
     var passwordIsValid = await bcrypt.compare(
@@ -50,8 +69,7 @@ exports.signin = async (req, res) => {
     );
 
     if (!passwordIsValid) {
-        return res.status(401).send({
-            accessToken: null,
+        return res.send({
             code: "invalid_password",
         });
     }
@@ -66,6 +84,7 @@ exports.signin = async (req, res) => {
 
 
     res.status(200).send({
+        code: "success",
         id: user._id,
         name: user.name,
         email: user.email,
