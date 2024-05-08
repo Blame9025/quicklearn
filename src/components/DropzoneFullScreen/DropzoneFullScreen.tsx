@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 export function DropzoneFullScreenComp(props: {dropFile: Function}){
   const [active, setActive] = useState(true);
   const {t ,i18n} = useTranslation();
-  const maxSize = 2000;
+  const maxSize = 5000;
   return (
     <>
       <Dropzone.FullScreen
@@ -70,10 +70,10 @@ export function DropzoneFullScreenComp(props: {dropFile: Function}){
 
           <div>
             <Text size="xl" inline>
-              Drag images here or click to select files
+              {t("dropzone_upload_title")}
             </Text>
             <Text size="sm" c="dimmed" inline mt={7}>
-              Attach as many files as you like, each file should not exceed 5mb
+            {t("dropzone_upload_content",{maxSize: maxSize+"KB"})}
             </Text>
           </div>
         </Group>

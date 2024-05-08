@@ -33,7 +33,12 @@ exports.signup = async (req, res) => {
     var userSave = await user.save();
     if(!userSave) return res.status(400).send({ code: "user_not_created" });
 
-    const token = jwt.sign({ id: user.id },
+    const token = jwt.sign({   
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        documents: user.documents, 
+    },
     process.env.JWT_SECRET,
     {
         algorithm: 'HS256',
@@ -44,10 +49,6 @@ exports.signup = async (req, res) => {
 
     res.status(200).send({
         code: "success",
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        documents: user.documents,
         accessToken: token
     });
 
@@ -73,8 +74,16 @@ exports.signin = async (req, res) => {
             code: "invalid_password",
         });
     }
-
-    const token = jwt.sign({ id: user.id },
+    var documentsBackup = user.documents
+    for(document in documentsBackup)
+      delete documentsBackup[document].questions
+    console.log(documentsBackup)
+    const token = jwt.sign({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        documents: documentsBackup,
+    },
     process.env.JWT_SECRET,
     {
         algorithm: 'HS256',
@@ -85,10 +94,7 @@ exports.signin = async (req, res) => {
 
     res.status(200).send({
         code: "success",
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        documents: user.documents,
+        
         accessToken: token
     });
 

@@ -29,9 +29,7 @@ export function Auth(props: PaperProps) {
   const navigate = useNavigate();
 
   async function handleOnSubmit(values: { email: string; password: string; name: string; terms: boolean} ){
-    console.log("asdadas")
     const response = await axiosHandler.post("/api/auth/"+type, values);
-    console.log("response", response.data)
     if(response.data.code != "success")
       return notifications.show({
         title: t("auth_"+response.data.code+"_title"),
@@ -63,13 +61,7 @@ export function Auth(props: PaperProps) {
             <Title className={classes.title} >
               QuickLearn
             </Title>
-            <Group grow mt={30}>
-                <GoogleButton radius="l">Google</GoogleButton>
-                <GithubButton radius="l">Github</GithubButton>
-            </Group>
-
-            <Divider label={t("auth_continueWith")} labelPosition="center" my="lg" />
-
+            <Divider my="lg" />
             <form onSubmit={form.onSubmit((values) => handleOnSubmit(values))}>
                 <Stack>
                 {type === 'signup' && (

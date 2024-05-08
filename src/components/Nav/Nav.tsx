@@ -16,32 +16,29 @@ import {
   InputBase,
   useCombobox,
   rem,
+  Menu,
+
   useMantineColorScheme,
 
 } from '@mantine/core';
 import {useState,useEffect} from "react";
 import { useDisclosure } from '@mantine/hooks';
-import { IconBulb, IconUser, IconCheckbox, IconLogout, IconPlus,IconSettings } from '@tabler/icons-react';
+import { IconBulb, IconUser, IconCheckbox, IconLogout, IconPlus,IconSettings,IconQuestionMark,IconTrash } from '@tabler/icons-react';
 import { UserButton } from '../UserButton/UserButton';
 import classes from './Nav.module.css';
 import { useTranslation } from 'react-i18next'
 import { getLanguage } from '../Language/Language';
 import { WordIcon, PowerPointIcon } from "../CustomIcons/CustomIcons"
-
-const documents = [
-  {id: 1, file: "document1.pptx"},
-  {id: 2, file: "document5.docx"},
-  {id: 313, file: "document61.docx"},
-  {id: 241, file: "document41.docx"},
-  {id: 522, file: "document13.docx"},
-  {id: 123132, file: "document166.docx"},
-
-
-];
-
-export function Nav() {
+import { useSelector } from 'react-redux';
+import { getTokenData } from '@/data';
+import axiosHandler from '@/axios';
+import {useNavigate} from "react-router-dom"
+import { useContextMenu } from 'mantine-contextmenu';
+export function Nav(props:any){
   const {t ,i18n} = useTranslation();
   const {languages, language, setLanguage} = getLanguage()
+  const navigate = useNavigate()
+  const { showContextMenu } = useContextMenu();
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: (eventSource) => {
@@ -52,6 +49,12 @@ export function Nav() {
       }
     },
   });
+  async function logout()
+  {
+    console.log("logout")
+    sessionStorage.clear()
+    navigate("/auth")
+  }
   const comboboxOptions = Object.keys(languages).map((index) => (
     <Combobox.Option value={index} key={index} active={index === language}>
         <Group gap="xs">
@@ -60,16 +63,37 @@ export function Nav() {
         </Group>
     </Combobox.Option>
 ));
-  const documentsComponents = documents.map((document) => (
-    <a href="#" onClick={(event) => event.preventDefault()} key={document.id} className={classes.collectionLink}>
-      <Group>
-      {document.file.split(".")[document.file.split(".").length - 1] == "docx" ? <WordIcon/> : <PowerPointIcon/>} {' '}
-        
-      {document.file}
-      
-      </Group>
+    const [opened, setOpened] = useState(false);
+    const data = getTokenData("token") as {documents: {id: number, fileName: string}[]}
+    const documentsComponents = data.documents.map((document) => (
 
-    </a>
+        <a href="#"
+          onContextMenu={showContextMenu([
+            {
+              key: 'copy',
+              icon: <IconPlus size={16} />,
+              title: 'Copy to clipboard',
+              onClick: () => {}
+            }
+          
+          ])}
+          onClick={(event) => {
+            
+            event.preventDefault()
+            props.onFileClick(document.id,document.fileName)
+            setOpened(false)
+          }
+          }  className={classes.collectionLink}>
+          <Group>
+            {document.fileName.split(".")[document.fileName.split(".").length - 1] == "docx" ? <WordIcon/> : <PowerPointIcon/>} {' '}
+              
+            {document.fileName}
+            
+          </Group>
+
+        </a>
+
+      
   ));
 
   const [settingsOpened, { open, close }] = useDisclosure(false);
@@ -87,7 +111,7 @@ export function Nav() {
         <div className={classes.section}>
           <UserButton />
         </div>
-
+    
       
         <div className={classes.section}>
           <Group className={classes.collectionsHeader} justify="space-between">
@@ -95,8 +119,8 @@ export function Nav() {
               {t("home_documents")}
             </Text>
             <Tooltip label={t("home_createDocumentTooltip")} withArrow position="right">
-              <ActionIcon variant="default" size={18}>
-                <IconPlus style={{ width: rem(12), height: rem(12) }} stroke={1.5} />
+              <ActionIcon variant="danger" size={18}>
+                <IconQuestionMark style={{ width: rem(12), height: rem(12) }} stroke={1.5} />
               </ActionIcon>
             </Tooltip>
           </Group>
@@ -108,7 +132,7 @@ export function Nav() {
         <div className={classes.sectionFooter} >
             <Group className={classes.footer}>
               <Button  leftSection = {<IconSettings />} variant="default" fullWidth onClick={open} className={classes.footerButton}>{t("home_settings")}</Button>
-              <Button  leftSection = {<IconLogout/>} variant = "light" color = "red" fullWidth className={classes.footerButton}>Logout</Button>
+              <Button  leftSection = {<IconLogout/>} variant = "light" color = "red" onClick={logout} fullWidth className={classes.footerButton}>Logout</Button>
             </Group>
         </div>
       </nav>
@@ -144,7 +168,6 @@ export function Nav() {
                 onOptionSubmit={(val) => {
                   setLanguage(val);
                   combobox.updateSelectedOptionIndex('active');
-                  
                 }}
               >
                 <Combobox.Target targetType="button">

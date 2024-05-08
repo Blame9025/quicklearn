@@ -1,5 +1,10 @@
-import { createTheme } from '@mantine/core';
+import { createTheme,ActionIcon } from '@mantine/core';
+import navClasses from './components/Nav/Nav.module.css';
 
 export const theme = createTheme({
-  /** Put your mantine theme override here */
+  components: {
+    ActionIcon: ActionIcon.extend({
+      classNames: navClasses,
+    }),
+  },
 });
