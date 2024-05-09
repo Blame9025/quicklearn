@@ -83,6 +83,31 @@ module.exports = function(app) {
     }
     res.send({ code: "success", score: score, maxScore: maxScore })
   })
+  app.post("/api/document/action/delete", [verifyToken], async (req, res) => {
+    const tokenData = jwt.verify(req.headers["authorization"], process.env.JWT_SECRET);
+    const user = await User.findOne({ _id: tokenData.id }).exec();
+    const document = user.documents.find(document => document.id == req.body.id)
+    if(!document)
+      return res.send({ code: "document_not_found" });
+    user.documents = user.documents.filter(document => document.id != req.body.id)
+    user.save()
+    const token = jwt.sign({   
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      documents: user.documents, 
+    },
+    process.env.JWT_SECRET,
+    {
+        algorithm: 'HS256',
+        allowInsecureKeySizes: true,
+        expiresIn: 86400, // 24 hours
+    });
+    res.send({
+      code: "success",
+      token: token
+    })
+  })
   app.post("/api/document/action/upload", [verifyToken], async (req, res) => {
     uploadFile(req, res, async (error) => {
       if (error) {
@@ -114,7 +139,7 @@ module.exports = function(app) {
           {
             role: "user",
             content:
-              "Please process the content of the document in "+req.body.language+" language. Create a set of at least 10 you have not maximum count of questions , please create questions for every row of content analyzed, of course questions based on the content that should help me understand the document better. With the questions should come 3 variant of responses, 1 correct, 2 wrong attached to every question. Please pass the question with answers in JSON format and do not use code formatter.An example you must follow is {'question': 'The current year is:' , 'answers': [{'answer': '2023',correct:false},{'answer': '2024',correct:true},{'answer': '2022',correct:false}]}, do not create a answer pattern. Please provide the questions in the language provided."
+              "Please process the content of the document in "+req.body.language+" language. Create a set of at least 10 you have not maximum count of questions , please create questions for every row of content analyzed, of course questions based on the content that should help me understand the document better. With the questions should come 3 variant of responses, 1 correct, 2 wrong attached to every question. Please pass the question with answers in JSON format and do not use code formatter.An example you must follow is {'question': 'The current year is:' , 'answers': [{'answer': '2023',correct:false},{'answer': '2024',correct:true},{'answer': '2022',correct:false}]}, do not create a answer pattern. Please provide the questions in the language provided. The content should only contain the JSON as I explained to you.z"
           },
         ],
         tool_resources: { 

@@ -63,17 +63,29 @@ export function Nav(props:any){
         </Group>
     </Combobox.Option>
 ));
-    const [opened, setOpened] = useState(false);
+    const [deleting, setDeleting] = useState(false);
     const data = getTokenData("token") as {documents: {id: number, fileName: string}[]}
     const documentsComponents = data.documents.map((document) => (
 
         <a href="#"
           onContextMenu={showContextMenu([
             {
-              key: 'copy',
-              icon: <IconPlus size={16} />,
-              title: 'Copy to clipboard',
-              onClick: () => {}
+              key: 'delete',
+              icon: <IconTrash size={16} />,
+              title: t("home_delete_document"),
+              color: "red",
+              disabled: deleting,
+              onClick: async () => {
+                setDeleting(true)
+                const response = await axiosHandler.post("/api/document/action/delete", {id: document.id})
+                if(response.data.code == "success")
+                {
+                  sessionStorage.setItem("token",response.data.token)
+                  navigate("/")
+        
+                }
+                setDeleting(false)
+              }
             }
           
           ])}
@@ -81,7 +93,6 @@ export function Nav(props:any){
             
             event.preventDefault()
             props.onFileClick(document.id,document.fileName)
-            setOpened(false)
           }
           }  className={classes.collectionLink}>
           <Group>
