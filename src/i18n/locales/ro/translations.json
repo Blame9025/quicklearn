@@ -26,7 +26,7 @@
     "home_delete_document": "Sterge documentul",
     "dropzone_upload_title": "Incarcati documente sau prezentari",
     "dropzone_upload_content": "Incarcati cate un fisier in limita a {{maxSize}}",
-
+    "quiz_next": "Urmatoarea intrebare",
     "dropzone_maxSizeExceded_title": "Dimensiune fisier depasita",
     "dropzone_maxSizeExceded_content": "Fisierul pe care ai incercat sa il urci a depasit dimensiunea de {{maxSize}}.",
     "dropzone_maxFilesExceded_title": "Prea multe fisiere",

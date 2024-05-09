@@ -35,7 +35,7 @@
     "dropzone_invalidFileType_content": "The file you are trying to upload is not supported.",
     "router_no_token_title": "Authentication required",
     "router_no_token_content": "You need to be authenticated to access this page. Please login or register.",
-
+    "quiz_next": "Urmatoarea intrebare",
 
     "auth_user_not_created_title": "Authentication error",
     "auth_user_not_created_content": "User was not created due to server problems, please try again.",

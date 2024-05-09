@@ -22,10 +22,12 @@ export function HomePage() {
   const [value, setValue] = useState("");
   const data = getTokenData("token") as {documents: {id: number, fileName: string}[]} 
   const [time, setTime] = useState("")
+
   var endTime;
   var timePerQuestion = 1  // un minut per intrebare
   var timer: string | number | NodeJS.Timeout | undefined
   async function onFileClick(id: number,name: string){
+    sessionStorage.removeItem("timer")
     setfileid(id)
     setStarted(false)
 
@@ -34,6 +36,7 @@ export function HomePage() {
 
   async function onQuizStart()
   {
+
     setStarted(true)
     const resp = await axiosHandler.post("/api/document/action/questions", {
       id: fileid
@@ -80,9 +83,14 @@ export function HomePage() {
     formData.append("language", languages[language]);
     
     setLoading(true)
-    const resp = await axiosHandler.post("/api/document/action/upload", formData,{
+    var resp = await axiosHandler.post("/api/document/action/upload", formData,{
       timeout: 60000,
     })
+    while(resp.data.code == "wrong_format"){
+      resp = await axiosHandler.post("/api/document/action/upload", formData,{
+        timeout: 60000,
+      })
+    }
     if(resp.data.code == "file_uploaded")
     {
       sessionStorage.setItem("token", resp.data.token);
@@ -94,7 +102,7 @@ export function HomePage() {
       <LoadingOverlay visible={loading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
       <DropzoneFullScreenComp dropFile={dropFile}/>
       <Nav onFileClick={onFileClick} />
-      <Paper shadow="xs" pos="absolute" left={310} bottom={10} w={1600} h={910} bg="dark">
+      <Paper shadow="xs" pos="absolute" left={310} bottom={10} w={1600} h={910} >
         <Center mah={910} maw={800} h ={910} ml={350}>
           {!started ? 
           <>
@@ -124,6 +132,8 @@ export function HomePage() {
                   flex={1}
                   value={value}
                   onChange={setValue}
+                  fz="h1"
+                  className='titleLabel'
                   classNames={{label: classes.titleLabel}}
                   label={questions ? questions[currentQuestion].question: ""}
                 >
@@ -145,10 +155,10 @@ export function HomePage() {
                     </Paper>
                   </Stack>
                 </Radio.Group>
-                <Text pos="absolute" top={850} left={50} className={classes.timer}>
+                <Text pos="absolute" top={850} left={50}  fz="h1" className={classes.timer}>
                   {time}
                 </Text>
-                <Button pos="absolute" top={850} right={50} disabled={value == ""} onClick={nextQuestion} >Next question</Button>
+                <Button pos="absolute" top={850} right={50} disabled={value == ""} onClick={nextQuestion} >{t("quiz_next")}</Button>
               </>
             }
           </> 
