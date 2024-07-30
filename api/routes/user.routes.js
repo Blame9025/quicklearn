@@ -126,7 +126,7 @@ module.exports = function(app) {
         {
           role: "user",
           content:
-            "Please process the content of the document in "+req.body.language+" language. Create a set of at least 10 you have not maximum count of questions , please create questions for every row of content analyzed, of course questions based on the content that should help me understand the document better. With the questions should come 3 variant of responses, 1 correct, 2 wrong attached to every question. Please pass the question with answers in JSON format and do not use code formatter.An example you must follow is {'question': 'The current year is:' , 'answers': [{'answer': '2023',correct:false},{'answer': '2024',correct:true},{'answer': '2022',correct:false}]}, do not create a answer pattern. Please provide the questions in the language provided. The content should only contain the JSON as I explained to you."
+            "Please process the content of the document in "+req.body.language+" language. Create a set of 10 , please create questions for every row of content analyzed, of course questions based on the content that should help me understand the document better  . With the questions should come 3 variant of responses, 1 correct, 2 wrong attached to every question. Please pass the question with answers in JSON format and do not use code formatter.An example you must follow is {'question': 'The current year is:' , 'answers': [{'answer': '2023',correct:false},{'answer': '2024',correct:true},{'answer': '2022',correct:false}]}, do not create a answer pattern. Please provide the questions in the language provided. The content should only contain the JSON as I explained to you without any other punctuation than the requested content.Questions are based on the content from the document or slides in case of powerpoint."
         },
       ],
       tool_resources: { 
@@ -143,7 +143,7 @@ module.exports = function(app) {
     const messages = await openai.beta.threads.messages.list(thread.id, {
       run_id: run.id,
     });
-    return messages
+    return {thread: thread, messages: messages}
   }
   app.post("/api/document/action/upload", [verifyToken], async (req, res) => {
     uploadFile(req, res, async (error) => {
@@ -175,65 +175,70 @@ module.exports = function(app) {
           file_id: file.id
         }
       )
-      const messages = await requestGPT(res,req)
+      const {messages, thread} = await requestGPT(res,req)
        
       const message = messages.data.pop();
-      if (message.content[0].type === "text") {
-        const { text } = message.content[0];
-        // await openai.files.del(file.id); 
-        // await openai.beta.vectorStores.files.del(
-        //   process.env.OPENAI_VECTOR,
-        //   file.id
-        // );
-
-        // await fs.rmSync(newPath, { force: true })  
-        // await openai.beta.threads.del(thread.id);
-
-        var questions;
-        try{
-          console.log("before",JSON.parse(text.value))
-          const parsedContent = JSON.parse(text.value)
-          questions = parsedContent.questions ? parsedContent.questions : parsedContent
-        }catch(e){
+      console.log(message)
+      if(!message) 
+        return res.send({ code: "problem_occured" });
+        if (message.content[0].type === "text") {
+          const { text } = message.content[0];
+          await openai.files.del(file.id); 
+          await openai.beta.vectorStores.files.del(
+            process.env.OPENAI_VECTOR,
+            file.id
+          );
+  
+          await fs.rmSync(newPath, { force: true })  
+          await openai.beta.threads.del(thread.id);
+  
+          var questions;
+          try{
+            console.log("before",JSON.parse(text.value))
+            const parsedContent = JSON.parse(text.value)
+            questions = parsedContent.questions ? parsedContent.questions : parsedContent
+          }catch(e){
+            console.log("[API] Error parsing provided content",text.value)
+            console.log("[API] Error parsing JSON",e)
+            return res.send({
+              code: "wrong_format"
+            })
+            
+          }
+          function randomIntFromInterval(min, max) { // min and max included 
+            return Math.floor(Math.random() * (max - min + 1) + min);
+          }
+          console.log(typeof questions, questions)
+          for(let question of questions) {
+            question.answers.sort(() => randomIntFromInterval(0,2));
+          }
+          user.documents.push({fileName: req.file.originalname, questions: questions ,id: documentId});
           
-          console.log("[API] Error parsing JSON",e)
-          return res.send({
-            code: "wrong_format"
-          })
-          
+          var documentsBackup = JSON.parse(JSON.stringify(user.documents))
+          for(document in documentsBackup)
+            delete documentsBackup[document].questions
+          console.log(documentsBackup)
+          const token = jwt.sign({   
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            documents: documentsBackup, 
+          },
+          process.env.JWT_SECRET,
+          {
+              algorithm: 'HS256',
+              allowInsecureKeySizes: true,
+              expiresIn: 86400, // 24 hours
+          });
+         
+          res.send({
+            code: "file_uploaded", 
+            token: token
+          });
+          user.save()
         }
-        function randomIntFromInterval(min, max) { // min and max included 
-          return Math.floor(Math.random() * (max - min + 1) + min);
-        }
-        console.log(typeof questions, questions)
-        for(let question of questions) {
-          question.answers.sort(() => randomIntFromInterval(0,2));
-        }
-        user.documents.push({fileName: req.file.originalname, questions: questions ,id: documentId});
-        
-        var documentsBackup = JSON.parse(JSON.stringify(user.documents))
-        for(document in documentsBackup)
-          delete documentsBackup[document].questions
-        console.log(documentsBackup)
-        const token = jwt.sign({   
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          documents: documentsBackup, 
-        },
-        process.env.JWT_SECRET,
-        {
-            algorithm: 'HS256',
-            allowInsecureKeySizes: true,
-            expiresIn: 86400, // 24 hours
-        });
-       
-        res.send({
-          code: "file_uploaded", 
-          token: token
-        });
-        user.save()
-      }
+      
+      
     
     });
   });
